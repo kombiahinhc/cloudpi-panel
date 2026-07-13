@@ -14,42 +14,68 @@
 
     <nav class="mt-8 px-3 space-y-1">
 
-        <a href="{{ route('dashboard') }}"
-           class="flex items-center rounded-lg px-4 py-3 bg-blue-600 text-white">
+        <x-cloudpi.nav-item
+            :href="route('dashboard')"
+            :active="request()->routeIs('dashboard')"
+        >
             Dashboard
-        </a>
+        </x-cloudpi.nav-item>
 
-        <a href="#" class="flex items-center rounded-lg px-4 py-3 text-zinc-300 hover:bg-zinc-800">
+        <x-cloudpi.nav-item
+            href="#"
+            :active="false"
+        >
             Websites
-        </a>
-
-        <a href="#" class="flex items-center rounded-lg px-4 py-3 text-zinc-300 hover:bg-zinc-800">
+        </x-cloudpi.nav-item>
+        
+        <x-cloudpi.nav-item
+            href="#"
+            :active="false"
+        >
             Databases
-        </a>
-
-        <a href="#" class="flex items-center rounded-lg px-4 py-3 text-zinc-300 hover:bg-zinc-800">
+        </x-cloudpi.nav-item>
+        
+        <x-cloudpi.nav-item
+            href="#"
+            :active="false"
+        >
             Docker
-        </a>
-
-        <a href="#" class="flex items-center rounded-lg px-4 py-3 text-zinc-300 hover:bg-zinc-800">
+        </x-cloudpi.nav-item>
+        
+        <x-cloudpi.nav-item
+            href="#"
+            :active="false"
+        >
             Files
-        </a>
+        </x-cloudpi.nav-item>
 
-        <a href="#" class="flex items-center rounded-lg px-4 py-3 text-zinc-300 hover:bg-zinc-800">
+        <x-cloudpi.nav-item
+            href="#"
+            :active="false"
+        >
             Cron Jobs
-        </a>
-
-        <a href="#" class="flex items-center rounded-lg px-4 py-3 text-zinc-300 hover:bg-zinc-800">
+        </x-cloudpi.nav-item>
+        
+        <x-cloudpi.nav-item
+            href="#"
+            :active="false"
+        >
             Backups
-        </a>
-
-        <a href="#" class="flex items-center rounded-lg px-4 py-3 text-zinc-300 hover:bg-zinc-800">
+        </x-cloudpi.nav-item>
+        
+        <x-cloudpi.nav-item
+            href="#"
+            :active="false"
+        >
             Monitoring
-        </a>
-
-        <a href="#" class="flex items-center rounded-lg px-4 py-3 text-zinc-300 hover:bg-zinc-800">
+        </x-cloudpi.nav-item>
+        
+        <x-cloudpi.nav-item
+            href="#"
+            :active="false"
+        >
             Settings
-        </a>
+        </x-cloudpi.nav-item>
 
     </nav>
 
