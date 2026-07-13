@@ -1,9 +1,29 @@
 <?php
 
 use Livewire\Volt\Component;
+use App\Services\System\SystemService;
 
 new class extends Component {
-    //
+
+    public string $cpu;
+
+    public string $memory;
+
+    public string $disk;
+
+    public string $docker;
+
+    public function mount(SystemService $system): void
+    {
+        $this->cpu = $system->cpuUsage();
+
+        $this->memory = $system->memoryUsage();
+
+        $this->disk = $system->diskUsage();
+
+        $this->docker = $system->dockerStatus();
+    }
+
 };
 
 ?>
@@ -20,22 +40,22 @@ new class extends Component {
 
         <x-cloudpi.stat-card
             title="CPU Usage"
-            value="5%"
+            :value="$cpu"
         />
 
         <x-cloudpi.stat-card
             title="Memory"
-            value="2.1 GB"
+            :value="$memory"
         />
 
         <x-cloudpi.stat-card
             title="Disk"
-            value="22%"
+            :value="$disk"
         />
 
         <x-cloudpi.stat-card
             title="Docker"
-            value="Running"
+            :value="$docker"
             color="green"
         />
 
