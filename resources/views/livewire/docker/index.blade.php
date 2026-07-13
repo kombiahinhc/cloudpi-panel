@@ -6,17 +6,36 @@
         $stoppedContainers = $totalContainers - $runningContainers;
     @endphp
 
-    <div class="mb-8 flex items-center justify-between">
+    <div class="mb-8 flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
 
         <div>
 
-            <h1 class="text-3xl font-bold">
-                Docker Containers
-            </h1>
+            <div class="flex items-center gap-3">
+
+                <h1 class="text-3xl font-bold">
+                    Docker Containers
+                </h1>
+
+                <span class="rounded-full bg-blue-600 px-3 py-1 text-sm font-semibold text-white">
+                    {{ $totalContainers }}
+                </span>
+
+            </div>
 
             <p class="mt-2 text-zinc-400">
                 Manage your Docker containers from CloudPi.
             </p>
+
+        </div>
+
+        <div class="w-full lg:w-80">
+
+            <input
+                type="text"
+                wire:model.live.debounce.300ms="search"
+                placeholder="Search containers..."
+                class="w-full rounded-lg border border-zinc-700 bg-zinc-800 px-4 py-2 text-white placeholder:text-zinc-500 focus:border-blue-500 focus:outline-none"
+            >
 
         </div>
 
