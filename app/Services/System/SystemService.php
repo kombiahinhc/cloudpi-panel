@@ -3,28 +3,33 @@
 declare(strict_types=1);
 
 namespace App\Services\System;
+use App\DTOs\System\SystemOverview;
 
 final class SystemService
 {
-    public function overview(): array
+    public function overview(): SystemOverview
     {
-        return [
-            'hostname' => gethostname(),
+        $memory = $this->memory();
+        $disk = $this->disk();
 
-            'cpu_load' => round(sys_getloadavg()[0], 2),
+        return new SystemOverview(
+            hostname: gethostname() ?: 'Unknown',
+            cpuLoad: round(sys_getloadavg()[0], 2),
 
-            'memory' => $this->memory(),
+            memoryUsedGb: $memory['used_gb'],
+            memoryTotalGb: $memory['total_gb'],
+            memoryPercent: $memory['percent'],
 
-            'disk' => $this->disk(),
+            diskUsedGb: $disk['used_gb'],
+            diskTotalGb: $disk['total_gb'],
+            diskPercent: $disk['percent'],
 
-            'docker_running' => $this->dockerRunning(),
+            dockerRunning: $this->dockerRunning(),
 
-            'php_version' => PHP_VERSION,
-
-            'os' => php_uname('s'),
-
-            'kernel' => php_uname('r'),
-        ];
+            phpVersion: PHP_VERSION,
+            os: php_uname('s'),
+            kernel: php_uname('r'),
+        );
     }
 
     private function memory(): array
@@ -46,7 +51,7 @@ final class SystemService
         return [
             'total_gb' => round($total / 1024 / 1024, 2),
             'used_gb' => round($used / 1024 / 1024, 2),
-            'percent' => round(($used / $total) * 100),
+            'percent' => (int) round(($used / $total) * 100),
         ];
     }
 
@@ -60,7 +65,7 @@ final class SystemService
         return [
             'total_gb' => round($total / 1024 / 1024 / 1024, 2),
             'used_gb' => round($used / 1024 / 1024 / 1024, 2),
-            'percent' => round(($used / $total) * 100),
+            'percent' => (int) round(($used / $total) * 100),
         ];
     }
 

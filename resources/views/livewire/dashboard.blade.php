@@ -1,20 +1,3 @@
-<?php
-
-use App\Services\System\SystemService;
-use Livewire\Volt\Component;
-
-new class extends Component {
-
-    public array $system = [];
-
-    public function mount(SystemService $service): void
-    {
-        $this->system = $service->overview();
-    }
-
-};
-?>
-
 <div class="p-8">
 
     <div class="mb-8">
@@ -27,23 +10,23 @@ new class extends Component {
 
         <x-cloudpi.stat-card
             title="CPU Usage"
-            :value="$system['cpu_load']"
+            :value="$this->system->cpuLoad"
         />
 
         <x-cloudpi.stat-card
             title="Memory"
-            :value="$system['memory']['used_gb'].' GB'"
+            :value="$this->system->memoryUsedGb . ' GB'"
         />
 
         <x-cloudpi.stat-card
             title="Disk"
-            :value="$system['disk']['percent'].'%'"
+            :value="$this->system->diskPercent . '%'"
         />
 
         <x-cloudpi.stat-card
             title="Docker"
-            :value="$system['docker_running'] ? 'Running' : 'Stopped'"
-            :color="$system['docker_running'] ? 'green' : 'red'"
+            :value="$this->system->dockerRunning ? 'Running' : 'Stopped'"
+            :color="$this->system->dockerRunning ? 'green' : 'red'"
         />
 
     </div>
