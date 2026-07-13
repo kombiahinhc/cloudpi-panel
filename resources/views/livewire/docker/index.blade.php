@@ -149,7 +149,14 @@
 
                             <td class="px-4 py-4">
 
-                                <div class="flex justify-center gap-2">                                
+                                <div class="flex justify-center gap-2">
+                                    
+                                    <button
+                                        wire:click="viewDetails('{{ $container->name }}')"
+                                        class="rounded-lg bg-zinc-600 px-3 py-2 text-sm text-white transition hover:bg-zinc-500"
+                                    >
+                                        View
+                                    </button>
                                     
                                     <button
                                         wire:click="viewLogs('{{ $container->name }}')"
@@ -238,6 +245,105 @@
                 <div class="max-h-[600px] overflow-auto p-5">
 
                     <pre class="whitespace-pre-wrap text-sm text-green-400">{{ $logs }}</pre>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    @endif
+    
+    @if ($showDetails)
+
+        <div class="fixed inset-0 z-40 flex items-center justify-center bg-black/70">
+
+            <div class="w-11/12 max-w-4xl rounded-xl bg-zinc-900 shadow-2xl">
+
+                <div class="flex items-center justify-between border-b border-zinc-800 p-5">
+
+                    <div>
+
+                        <h2 class="text-xl font-bold">
+                            Container Details
+                        </h2>
+
+                        <p class="text-sm text-zinc-400">
+                            {{ $details[0]['Name'] ?? '' }}
+                        </p>
+
+                    </div>
+
+                    <button
+                        wire:click="closeDetails"
+                        class="rounded-lg bg-red-600 px-4 py-2 text-white hover:bg-red-700"
+                    >
+                        Close
+                    </button>
+
+                </div>
+
+                <div class="grid grid-cols-2 gap-6 p-6">
+
+                    <div>
+
+                        <p class="text-sm text-zinc-500">Container ID</p>
+
+                        <p class="mt-1 break-all font-mono">
+                            {{ $details[0]['Id'] ?? '-' }}
+                        </p>
+
+                    </div>
+
+                    <div>
+
+                        <p class="text-sm text-zinc-500">Image</p>
+
+                        <p class="mt-1">
+                            {{ $details[0]['Config']['Image'] ?? '-' }}
+                        </p>
+
+                    </div>
+
+                    <div>
+
+                        <p class="text-sm text-zinc-500">Created</p>
+
+                        <p class="mt-1">
+                            {{ $details[0]['Created'] ?? '-' }}
+                        </p>
+
+                    </div>
+
+                    <div>
+
+                        <p class="text-sm text-zinc-500">Platform</p>
+
+                        <p class="mt-1">
+                            {{ $details[0]['Platform'] ?? '-' }}
+                        </p>
+
+                    </div>
+
+                    <div>
+
+                        <p class="text-sm text-zinc-500">Restart Policy</p>
+
+                        <p class="mt-1">
+                            {{ $details[0]['HostConfig']['RestartPolicy']['Name'] ?? '-' }}
+                        </p>
+
+                    </div>
+
+                    <div>
+
+                        <p class="text-sm text-zinc-500">Status</p>
+
+                        <p class="mt-1">
+                            {{ $details[0]['State']['Status'] ?? '-' }}
+                        </p>
+
+                    </div>
 
                 </div>
 

@@ -18,6 +18,24 @@ final class Index extends Component
 
     public string $logs = '';
 
+    public bool $showDetails = false;
+
+    public array $details = [];
+
+    public function viewDetails(string $container): void
+    {
+        $this->details = app(DockerService::class)->inspect($container);
+
+        $this->showDetails = true;
+    }
+
+    public function closeDetails(): void
+    {
+        $this->showDetails = false;
+
+        $this->details = [];
+    }
+
     public function viewLogs(string $container): void
     {
         $this->selectedContainer = $container;
@@ -75,7 +93,6 @@ final class Index extends Component
                         strtolower($this->search)
                     )
             );
-
         }
 
         return view('livewire.docker.index', [

@@ -45,6 +45,21 @@ final class DockerService
         return $containers;
     }
 
+    public function inspect(string $container): array
+    {
+        $container = escapeshellarg($container);
+
+        $output = shell_exec(
+            "docker inspect {$container} 2>/dev/null"
+        );
+
+        if (blank($output)) {
+            return [];
+        }
+
+        return json_decode($output, true) ?? [];
+    }
+
     public function logs(string $container, int $lines = 100): string
     {
         $container = escapeshellarg($container);
