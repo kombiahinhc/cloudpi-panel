@@ -1,15 +1,7 @@
 <aside class="fixed inset-y-0 left-0 w-64 bg-zinc-900 border-r border-zinc-800">
 
     <div class="p-6">
-
-        <h1 class="text-3xl font-bold text-blue-500">
-            CloudPi
-        </h1>
-
-        <p class="mt-1 text-sm text-zinc-400">
-            Developer Hosting Platform
-        </p>
-
+        <x-cloudpi.logo />
     </div>
 
     <nav class="mt-8 px-3 space-y-1">
