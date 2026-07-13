@@ -1,8 +1,66 @@
 <div class="p-8">
 
-    <h1 class="mb-6 text-3xl font-bold">
-        Docker Containers
-    </h1>
+    @php
+        $totalContainers = count($containers);
+        $runningContainers = collect($containers)->where('state', 'running')->count();
+        $stoppedContainers = $totalContainers - $runningContainers;
+    @endphp
+
+    <div class="mb-8 flex items-center justify-between">
+
+        <div>
+
+            <h1 class="text-3xl font-bold">
+                Docker Containers
+            </h1>
+
+            <p class="mt-2 text-zinc-400">
+                Manage your Docker containers from CloudPi.
+            </p>
+
+        </div>
+
+    </div>
+
+    <div class="mb-8 grid grid-cols-1 gap-6 md:grid-cols-3">
+
+        <div class="rounded-xl border border-zinc-800 bg-zinc-900 p-6">
+
+            <p class="text-sm text-zinc-400">
+                Total Containers
+            </p>
+
+            <h2 class="mt-2 text-3xl font-bold">
+                {{ $totalContainers }}
+            </h2>
+
+        </div>
+
+        <div class="rounded-xl border border-zinc-800 bg-zinc-900 p-6">
+
+            <p class="text-sm text-zinc-400">
+                Running
+            </p>
+
+            <h2 class="mt-2 text-3xl font-bold text-green-500">
+                {{ $runningContainers }}
+            </h2>
+
+        </div>
+
+        <div class="rounded-xl border border-zinc-800 bg-zinc-900 p-6">
+
+            <p class="text-sm text-zinc-400">
+                Stopped
+            </p>
+
+            <h2 class="mt-2 text-3xl font-bold text-red-500">
+                {{ $stoppedContainers }}
+            </h2>
+
+        </div>
+
+    </div>
 
     <div class="overflow-hidden rounded-xl border border-zinc-800 bg-zinc-900">
 
@@ -32,27 +90,27 @@
 
                 @foreach ($containers as $container)
 
-                    <tr class="border-b border-zinc-800">
+                    <tr class="border-b border-zinc-800 hover:bg-zinc-800/40">
 
-                        <td class="px-4 py-3 font-medium">
+                        <td class="px-4 py-4 font-medium">
                             {{ $container->name }}
                         </td>
 
-                        <td class="px-4 py-3">
+                        <td class="px-4 py-4 text-zinc-300">
                             {{ $container->image }}
                         </td>
 
-                        <td class="px-4 py-3">
+                        <td class="px-4 py-4">
 
                             @if ($container->state === 'running')
 
-                                <span class="rounded bg-green-600 px-2 py-1 text-xs text-white">
+                                <span class="rounded-full bg-green-600/20 px-3 py-1 text-xs font-semibold text-green-400">
                                     Running
                                 </span>
 
                             @else
 
-                                <span class="rounded bg-red-600 px-2 py-1 text-xs text-white">
+                                <span class="rounded-full bg-red-600/20 px-3 py-1 text-xs font-semibold text-red-400">
                                     Stopped
                                 </span>
 
@@ -60,15 +118,15 @@
 
                         </td>
 
-                        <td class="px-4 py-3">
+                        <td class="max-w-xs truncate px-4 py-4 text-zinc-400">
                             {{ $container->ports ?: '-' }}
                         </td>
 
-                        <td class="px-4 py-3">
+                        <td class="px-4 py-4 text-zinc-400">
                             {{ $container->created }}
                         </td>
 
-                        <td class="px-4 py-3">
+                        <td class="px-4 py-4">
 
                             <div class="flex justify-center gap-2">
 
@@ -77,7 +135,7 @@
                                     <button
                                         wire:click="restart('{{ $container->name }}')"
                                         wire:confirm="Restart this container?"
-                                        class="rounded bg-blue-600 px-3 py-1 text-sm text-white hover:bg-blue-700"
+                                        class="rounded-lg bg-blue-600 px-3 py-2 text-sm text-white transition hover:bg-blue-700"
                                     >
                                         Restart
                                     </button>
@@ -85,7 +143,7 @@
                                     <button
                                         wire:click="stop('{{ $container->name }}')"
                                         wire:confirm="Stop this container?"
-                                        class="rounded bg-red-600 px-3 py-1 text-sm text-white hover:bg-red-700"
+                                        class="rounded-lg bg-red-600 px-3 py-2 text-sm text-white transition hover:bg-red-700"
                                     >
                                         Stop
                                     </button>
@@ -95,7 +153,7 @@
                                     <button
                                         wire:click="start('{{ $container->name }}')"
                                         wire:confirm="Start this container?"
-                                        class="rounded bg-green-600 px-3 py-1 text-sm text-white hover:bg-green-700"
+                                        class="rounded-lg bg-green-600 px-3 py-2 text-sm text-white transition hover:bg-green-700"
                                     >
                                         Start
                                     </button>
