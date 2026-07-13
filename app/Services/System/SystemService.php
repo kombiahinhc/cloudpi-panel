@@ -13,7 +13,13 @@ final class SystemService
         $disk = $this->disk();
 
         return new SystemOverview(
-            hostname: gethostname() ?: 'Unknown',
+            hostname: $this->hostname(),
+            model: $this->model(),
+            os: $this->operatingSystem(),
+            kernel: php_uname('r'),
+            phpVersion: PHP_VERSION,
+            uptime: $this->uptime(),
+
             cpuLoad: round(sys_getloadavg()[0], 2),
 
             memoryUsedGb: $memory['used_gb'],
@@ -25,11 +31,36 @@ final class SystemService
             diskPercent: $disk['percent'],
 
             dockerRunning: $this->dockerRunning(),
-
-            phpVersion: PHP_VERSION,
-            os: php_uname('s'),
-            kernel: php_uname('r'),
         );
+    }
+    
+    private function operatingSystem(): string
+    {
+        $file = '/etc/os-release';
+
+        if (! file_exists($file)) {
+            return php_uname('s');
+        }
+
+        $data = parse_ini_file($file);
+
+        return $data['PRETTY_NAME'] ?? php_uname('s');
+    }
+    
+    private function hostname(): string
+    {
+        return gethostname() ?: 'Unknown';
+    }
+    
+    private function model(): string
+    {
+        $file = '/proc/device-tree/model';
+
+        if (! file_exists($file)) {
+            return 'Unknown';
+        }
+
+        return trim(file_get_contents($file));
     }
 
     private function memory(): array
@@ -74,5 +105,15 @@ final class SystemService
         exec('docker info >/dev/null 2>&1', $output, $code);
 
         return $code === 0;
+    }
+    
+    private function uptime(): string
+    {
+        $seconds = (int) explode(' ', trim(file_get_contents('/proc/uptime')))[0];
+
+        $days = intdiv($seconds, 86400);
+        $hours = intdiv($seconds % 86400, 3600);
+
+        return "{$days}d {$hours}h";
     }
 }

@@ -8,6 +8,12 @@ final readonly class SystemOverview
 {
     public function __construct(
         public string $hostname,
+        public string $model,
+        public string $os,
+        public string $kernel,
+        public string $phpVersion,
+        public string $uptime,
+
         public float $cpuLoad,
 
         public float $memoryUsedGb,
@@ -19,9 +25,5 @@ final readonly class SystemOverview
         public int $diskPercent,
 
         public bool $dockerRunning,
-
-        public string $phpVersion,
-        public string $os,
-        public string $kernel,
     ) {}
 }
