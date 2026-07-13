@@ -13,5 +13,6 @@ final readonly class ContainerInfo
         public string $status,
         public string $state,
         public string $ports,
+        public string $created,
     ) {}
 }

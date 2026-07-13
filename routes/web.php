@@ -19,4 +19,8 @@ Route::get('/docker-test', function (DockerService $docker) {
 
 });
 
+Route::view('/docker', 'docker')
+    ->middleware(['auth'])
+    ->name('docker.index');
+
 require __DIR__.'/auth.php';

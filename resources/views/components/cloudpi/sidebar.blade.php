@@ -28,8 +28,8 @@
         </x-cloudpi.nav-item>
         
         <x-cloudpi.nav-item
-            href="#"
-            :active="false"
+            :href="route('docker.index')"
+            :active="request()->routeIs('docker.*')"
         >
             Docker
         </x-cloudpi.nav-item>

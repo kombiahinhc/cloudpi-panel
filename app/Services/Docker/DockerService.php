@@ -4,24 +4,44 @@ declare(strict_types=1);
 
 namespace App\Services\Docker;
 
+use App\DTOs\Docker\ContainerInfo;
+
 final class DockerService
 {
+    /**
+     * @return ContainerInfo[]
+     */
     public function containers(): array
     {
-        $json = shell_exec(
+        $output = shell_exec(
             'docker ps -a --format "{{json .}}"'
         );
 
-        if (empty($json)) {
+        if (blank($output)) {
             return [];
         }
 
-        $lines = explode("\n", trim($json));
+        $containers = [];
 
-        return collect($lines)
-            ->filter()
-            ->map(fn ($line) => json_decode($line, true))
-            ->values()
-            ->all();
+        foreach (explode("\n", trim($output)) as $line) {
+
+            if (blank($line)) {
+                continue;
+            }
+
+            $json = json_decode($line, true);
+
+            $containers[] = new ContainerInfo(
+                id: $json['ID'],
+                name: $json['Names'],
+                image: $json['Image'],
+                status: $json['Status'],
+                state: $json['State'],
+                ports: $json['Ports'] ?? '',
+                created: $json['RunningFor'],
+            );
+        }
+
+        return $containers;
     }
 }
