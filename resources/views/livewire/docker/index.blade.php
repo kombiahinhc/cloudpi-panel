@@ -8,28 +8,64 @@
 
         <table class="min-w-full">
 
-            <thead>
+            <thead class="border-b border-zinc-800">
+
                 <tr>
-                    <th>Name</th>
-                    <th>Image</th>
-                    <th>Status</th>
-                    <th>State</th>
-                    <th>Ports</th>
-                    <th>Running For</th>
+
+                    <th class="px-4 py-3 text-left">Name</th>
+
+                    <th class="px-4 py-3 text-left">Image</th>
+
+                    <th class="px-4 py-3 text-left">Status</th>
+
+                    <th class="px-4 py-3 text-left">Ports</th>
+
+                    <th class="px-4 py-3 text-left">Running For</th>
+
+                    <th class="px-4 py-3 text-center">Actions</th>
+
                 </tr>
+
             </thead>
 
             <tbody>
 
                 @foreach ($containers as $container)
 
-                    <tr>
-                        <td>{{ $container->name }}</td>
-                        <td>{{ $container->image }}</td>
-                        <td>{{ $container->status }}</td>
-                        <td>{{ $container->state }}</td>
-                        <td>{{ $container->ports }}</td>
-                        <td>{{ $container->created }}</td>
+                    <tr class="border-b border-zinc-800">
+
+                        <td class="px-4 py-3">
+                            {{ $container->name }}
+                        </td>
+
+                        <td class="px-4 py-3">
+                            {{ $container->image }}
+                        </td>
+
+                        <td class="px-4 py-3">
+                            {{ $container->status }}
+                        </td>
+
+                        <td class="px-4 py-3">
+                            {{ $container->ports }}
+                        </td>
+
+                        <td class="px-4 py-3">
+                            {{ $container->created }}
+                        </td>
+
+                        <td class="px-4 py-3 text-center">
+
+                            <button
+                                wire:click="restart('{{ $container->name }}')"
+                                wire:confirm="Restart this container?"
+                                class="rounded bg-blue-600 px-3 py-1 text-sm text-white hover:bg-blue-700"
+                            >
+                                Restart
+                            </button>
+
+                        </td>
+
                     </tr>
 
                 @endforeach

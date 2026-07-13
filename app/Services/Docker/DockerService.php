@@ -44,4 +44,17 @@ final class DockerService
 
         return $containers;
     }
+
+    public function restart(string $container): bool
+    {
+        $container = escapeshellarg($container);
+
+        exec(
+            "docker restart {$container}",
+            $output,
+            $exitCode
+        );
+
+        return $exitCode === 0;
+    }
 }
