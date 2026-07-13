@@ -10,6 +10,8 @@ use Livewire\Component;
 
 final class Index extends Component
 {
+    public string $search = '';
+
     public function start(string $container): void
     {
         app(DockerService::class)->start($container);
@@ -33,8 +35,27 @@ final class Index extends Component
 
     public function render(): View
     {
+        $containers = app(DockerService::class)->containers();
+
+        if ($this->search !== '') {
+
+            $containers = array_filter(
+                $containers,
+                fn ($container) =>
+                    str_contains(
+                        strtolower($container->name),
+                        strtolower($this->search)
+                    ) ||
+                    str_contains(
+                        strtolower($container->image),
+                        strtolower($this->search)
+                    )
+            );
+
+        }
+
         return view('livewire.docker.index', [
-            'containers' => app(DockerService::class)->containers(),
+            'containers' => array_values($containers),
         ]);
     }
 }
