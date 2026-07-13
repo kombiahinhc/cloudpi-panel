@@ -45,15 +45,22 @@ final class DockerService
         return $containers;
     }
 
+    public function logs(string $container, int $lines = 100): string
+    {
+        $container = escapeshellarg($container);
+
+        $output = shell_exec(
+            "docker logs --tail {$lines} {$container} 2>&1"
+        );
+
+        return $output ?: 'No logs available.';
+    }
+
     public function start(string $container): bool
     {
         $container = escapeshellarg($container);
 
-        exec(
-            "docker start {$container}",
-            $output,
-            $exitCode
-        );
+        exec("docker start {$container}", $output, $exitCode);
 
         return $exitCode === 0;
     }
@@ -62,11 +69,7 @@ final class DockerService
     {
         $container = escapeshellarg($container);
 
-        exec(
-            "docker stop {$container}",
-            $output,
-            $exitCode
-        );
+        exec("docker stop {$container}", $output, $exitCode);
 
         return $exitCode === 0;
     }
@@ -75,11 +78,7 @@ final class DockerService
     {
         $container = escapeshellarg($container);
 
-        exec(
-            "docker restart {$container}",
-            $output,
-            $exitCode
-        );
+        exec("docker restart {$container}", $output, $exitCode);
 
         return $exitCode === 0;
     }

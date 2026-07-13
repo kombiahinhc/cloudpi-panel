@@ -12,6 +12,30 @@ final class Index extends Component
 {
     public string $search = '';
 
+    public bool $showLogs = false;
+
+    public string $selectedContainer = '';
+
+    public string $logs = '';
+
+    public function viewLogs(string $container): void
+    {
+        $this->selectedContainer = $container;
+
+        $this->logs = app(DockerService::class)->logs($container);
+
+        $this->showLogs = true;
+    }
+
+    public function closeLogs(): void
+    {
+        $this->showLogs = false;
+
+        $this->selectedContainer = '';
+
+        $this->logs = '';
+    }
+
     public function start(string $container): void
     {
         app(DockerService::class)->start($container);
