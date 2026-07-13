@@ -16,11 +16,17 @@
 
     <x-cloudpi.sidebar />
 
-    <main class="ml-64 min-h-screen">
+    <div class="ml-64 min-h-screen">
 
-        {{ $slot }}
+        <x-cloudpi.header />
 
-    </main>
+        <main class="p-8">
+
+            {{ $slot }}
+
+        </main>
+
+    </div>
 
     @livewireScripts
 
