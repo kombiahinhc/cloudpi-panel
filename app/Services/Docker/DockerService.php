@@ -17,6 +17,30 @@ final class DockerService
             'docker ps -a --format "{{json .}}"'
         );
 
+        $statsOutput = shell_exec(
+            'docker stats --no-stream --format "{{json .}}" 2>/dev/null'
+        );
+
+        $stats = [];
+
+        if (! blank($statsOutput)) {
+            foreach (explode("\n", trim($statsOutput)) as $line) {
+
+                if (blank($line)) {
+                    continue;
+                }
+
+                $json = json_decode($line, true);
+
+                if (isset($json['Name'])) {
+                    $stats[$json['Name']] = [
+                        'cpu' => $json['CPUPerc'] ?? '-',
+                        'memory' => $json['MemUsage'] ?? '-',
+                    ];
+                }
+            }
+        }
+
         if (blank($output)) {
             return [];
         }
@@ -31,6 +55,8 @@ final class DockerService
 
             $json = json_decode($line, true);
 
+            $containerStats = $stats[$json['Names']] ?? [];
+
             $containers[] = new ContainerInfo(
                 id: $json['ID'],
                 name: $json['Names'],
@@ -38,7 +64,9 @@ final class DockerService
                 status: $json['Status'],
                 state: $json['State'],
                 ports: $json['Ports'] ?? '',
-                created: $json['RunningFor'],
+                created: $this->startedAt($json['Names']),
+                cpu: $containerStats['cpu'] ?? '-',
+                memory: $containerStats['memory'] ?? '-',
             );
         }
 
@@ -96,5 +124,31 @@ final class DockerService
         exec("docker restart {$container}", $output, $exitCode);
 
         return $exitCode === 0;
+    }
+    
+    public function startedAtHuman(string $container): string
+    {
+        return $this->startedAt($container);
+    }
+    
+    private function startedAt(string $container): string
+    {
+        $container = escapeshellarg($container);
+
+        $output = shell_exec(
+            "docker inspect --format='{{.State.StartedAt}}' {$container} 2>/dev/null"
+        );
+
+        if (blank($output)) {
+            return '-';
+        }
+
+        try {
+            return now()
+                ->parse(trim($output))
+                ->diffForHumans();
+        } catch (\Throwable) {
+            return trim($output);
+        }
     }
 }

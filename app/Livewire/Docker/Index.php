@@ -10,6 +10,8 @@ use Livewire\Component;
 
 final class Index extends Component
 {
+    protected DockerService $dockerService;
+    
     public string $search = '';
 
     public bool $showLogs = false;
@@ -21,10 +23,19 @@ final class Index extends Component
     public bool $showDetails = false;
 
     public array $details = [];
+    
+    public string $startedAt = '-';
+    
+    public function boot(DockerService $dockerService): void
+    {
+        $this->dockerService = $dockerService;
+    }
 
     public function viewDetails(string $container): void
     {
-        $this->details = app(DockerService::class)->inspect($container);
+        $this->details = $this->dockerService->inspect($container);
+        
+        $this->startedAt = $this->dockerService->startedAtHuman($container);
 
         $this->showDetails = true;
     }
@@ -40,7 +51,7 @@ final class Index extends Component
     {
         $this->selectedContainer = $container;
 
-        $this->logs = app(DockerService::class)->logs($container);
+        $this->logs = $this->dockerService->logs($container);
 
         $this->showLogs = true;
     }
@@ -56,28 +67,28 @@ final class Index extends Component
 
     public function start(string $container): void
     {
-        app(DockerService::class)->start($container);
+        $this->dockerService->start($container);
 
         $this->dispatch('$refresh');
     }
 
     public function stop(string $container): void
     {
-        app(DockerService::class)->stop($container);
+        $this->dockerService->stop($container);
 
         $this->dispatch('$refresh');
     }
 
     public function restart(string $container): void
     {
-        app(DockerService::class)->restart($container);
+        $this->dockerService->restart($container);
 
         $this->dispatch('$refresh');
     }
 
     public function render(): View
     {
-        $containers = app(DockerService::class)->containers();
+        $containers = $this->dockerService->containers();
 
         if ($this->search !== '') {
 

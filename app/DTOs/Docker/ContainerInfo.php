@@ -14,5 +14,10 @@ final readonly class ContainerInfo
         public string $state,
         public string $ports,
         public string $created,
-    ) {}
+
+        // Live statistics
+        public string $cpu = '-',
+        public string $memory = '-',
+    ) {
+    }
 }
