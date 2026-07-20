@@ -5,9 +5,15 @@ declare(strict_types=1);
 namespace App\Services\Docker;
 
 use App\DTOs\Docker\ContainerInfo;
+use App\DTOs\Docker\ContainerDetails;
+use App\Services\Docker\DockerMapper;
 
 final class DockerService
 {
+    public function __construct(
+        private readonly DockerMapper $mapper,
+    ) {
+    }
     /**
      * @return ContainerInfo[]
      */
@@ -73,7 +79,7 @@ final class DockerService
         return $containers;
     }
 
-    public function inspect(string $container): array
+    public function inspect(string $container): ?ContainerDetails
     {
         $container = escapeshellarg($container);
 
@@ -82,10 +88,21 @@ final class DockerService
         );
 
         if (blank($output)) {
-            return [];
+            return null;
         }
 
-        return json_decode($output, true) ?? [];
+        $inspect = json_decode($output, true);
+
+        if (
+            ! is_array($inspect) ||
+            empty($inspect[0])
+        ) {
+            return null;
+        }
+
+        return $this->mapper->mapContainerDetails(
+            $inspect[0]
+        );
     }
 
     public function logs(string $container, int $lines = 100): string

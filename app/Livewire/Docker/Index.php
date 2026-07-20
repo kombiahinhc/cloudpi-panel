@@ -33,11 +33,13 @@ final class Index extends Component
 
     public function viewDetails(string $container): void
     {
-        $this->details = $this->dockerService->inspect($container);
-        
-        $this->startedAt = $this->dockerService->startedAtHuman($container);
+        $details = $this->dockerService->inspect($container);
 
-        $this->showDetails = true;
+        if ($details !== null) {
+            $this->details = $details->toArray();
+
+            $this->showDetails = true;
+        }
     }
 
     public function closeDetails(): void

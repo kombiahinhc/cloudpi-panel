@@ -199,7 +199,7 @@
                         </h2>
 
                         <p class="text-sm text-zinc-400">
-                            {{ $details[0]['Name'] ?? '' }}
+                            {{ $details['name'] ?? '' }}
                         </p>
 
                     </div>
@@ -220,7 +220,7 @@
                         <p class="text-sm text-zinc-500">Container ID</p>
 
                         <p class="mt-1 break-all font-mono">
-                            {{ $details[0]['Id'] ?? '-' }}
+                            {{ $details['id'] ?? '-' }}
                         </p>
 
                     </div>
@@ -230,7 +230,7 @@
                         <p class="text-sm text-zinc-500">Image</p>
 
                         <p class="mt-1">
-                            {{ $details[0]['Config']['Image'] ?? '-' }}
+                            {{ $details['image'] ?? '-' }}
                         </p>
 
                     </div>
@@ -240,7 +240,7 @@
                         <p class="text-sm text-zinc-500">Started</p>
 
                         <p class="mt-1">
-                            {{ $startedAt }}
+                            {{ $details['startedAt'] ?? '-' }}
                         </p>
 
                     </div>
@@ -250,7 +250,7 @@
                         <p class="text-sm text-zinc-500">Platform</p>
 
                         <p class="mt-1">
-                            {{ $details[0]['Platform'] ?? '-' }}
+                            {{ $details['platform'] ?? '-' }}
                         </p>
 
                     </div>
@@ -260,7 +260,7 @@
                         <p class="text-sm text-zinc-500">Restart Policy</p>
 
                         <p class="mt-1">
-                            {{ $details[0]['HostConfig']['RestartPolicy']['Name'] ?? '-' }}
+                            {{ $details['restartPolicy'] ?? '-' }}
                         </p>
 
                     </div>
@@ -270,7 +270,11 @@
                         <p class="text-sm text-zinc-500">Ports</p>
 
                         <p class="mt-1 font-mono text-sm">
-                            {{ implode(', ', array_keys($details[0]['NetworkSettings']['Ports'] ?? [])) ?: '-' }}
+                            @if (! empty($details['ports']))
+                                {{ implode(', ', $details['ports']) }}
+                            @else
+                                -
+                            @endif
                         </p>
 
                     </div>
