@@ -12,16 +12,41 @@ return [
 
     'commands' => [
 
-        /*
-         * Log every executed shell command.
-         */
         'log' => env('CLOUDPI_LOG_COMMANDS', true),
 
-        /*
-         * Prefix all commands with sudo.
-         */
         'sudo' => env('CLOUDPI_USE_SUDO', false),
 
     ],
+
+    /*
+    |--------------------------------------------------------------------------
+    | Nginx
+    |--------------------------------------------------------------------------
+    */
+
+    'nginx' => [
+
+        'sites_available' => env(
+            'CLOUDPI_NGINX_SITES_AVAILABLE',
+            '/etc/nginx/sites-available'
+        ),
+
+        'sites_enabled' => env(
+            'CLOUDPI_NGINX_SITES_ENABLED',
+            '/etc/nginx/sites-enabled'
+        ),
+
+    ],
+
+    /*
+    |--------------------------------------------------------------------------
+    | Web Root
+    |--------------------------------------------------------------------------
+    */
+
+    'web_root' => env(
+        'CLOUDPI_WEB_ROOT',
+        '/var/www'
+    ),
 
 ];
