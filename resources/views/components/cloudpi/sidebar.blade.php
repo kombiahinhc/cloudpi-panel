@@ -14,8 +14,8 @@
         </x-cloudpi.nav-item>
 
         <x-cloudpi.nav-item
-            href="#"
-            :active="false"
+             :href="route('websites.index')"
+            :active="request()->routeIs('websites.*')"
         >
             Websites
         </x-cloudpi.nav-item>

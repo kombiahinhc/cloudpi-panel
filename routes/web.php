@@ -1,26 +1,23 @@
 <?php
 
+use App\Livewire\Websites\Index as WebsitesIndex;
 use Illuminate\Support\Facades\Route;
-use App\Services\Docker\DockerService;
 
 Route::view('/', 'welcome');
 
-Route::view('dashboard', 'dashboard')
-    ->middleware(['auth', 'verified'])
-    ->name('dashboard');
+Route::middleware(['auth'])->group(function () {
+    Route::view('/dashboard', 'dashboard')
+        ->middleware('verified')
+        ->name('dashboard');
 
-Route::view('profile', 'profile')
-    ->middleware(['auth'])
-    ->name('profile');
-    
-Route::get('/docker-test', function (DockerService $docker) {
+    Route::view('/profile', 'profile')
+        ->name('profile');
 
-    dd($docker->containers());
+    Route::view('/docker', 'docker')
+        ->name('docker.index');
 
+    Route::get('/websites', WebsitesIndex::class)
+        ->name('websites.index');
 });
 
-Route::view('/docker', 'docker')
-    ->middleware(['auth'])
-    ->name('docker.index');
-
-require __DIR__.'/auth.php';
+require __DIR__ . '/auth.php';
