@@ -29,6 +29,8 @@
     </div>
 
     @livewireScripts
+    
+    <livewire:shared.notifications />
 
 </body>
 

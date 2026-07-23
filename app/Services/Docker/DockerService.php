@@ -7,11 +7,14 @@ namespace App\Services\Docker;
 use App\DTOs\Docker\ContainerInfo;
 use App\DTOs\Docker\ContainerDetails;
 use App\Services\Docker\DockerMapper;
+use App\Support\ActionResult;
+use App\Services\Support\CommandExecutor;
 
 final class DockerService
 {
     public function __construct(
         private readonly DockerMapper $mapper,
+        private readonly CommandExecutor $commandExecutor,
     ) {
     }
     /**
@@ -116,31 +119,24 @@ final class DockerService
         return $output ?: 'No logs available.';
     }
 
-    public function start(string $container): bool
+    public function start(string $container): ActionResult
     {
-        $container = escapeshellarg($container);
-
-        exec("docker start {$container}", $output, $exitCode);
-
-        return $exitCode === 0;
+        return $this->run("docker start " . escapeshellarg($container));
     }
 
-    public function stop(string $container): bool
+    public function stop(string $container): ActionResult
     {
-        $container = escapeshellarg($container);
-
-        exec("docker stop {$container}", $output, $exitCode);
-
-        return $exitCode === 0;
+        return $this->run("docker stop " . escapeshellarg($container));
     }
 
-    public function restart(string $container): bool
+    public function restart(string $container): ActionResult
     {
-        $container = escapeshellarg($container);
+        return $this->run("docker restart " . escapeshellarg($container));
+    }
 
-        exec("docker restart {$container}", $output, $exitCode);
-
-        return $exitCode === 0;
+    private function run(string $command): ActionResult
+    {
+        return $this->commandExecutor->run($command);
     }
     
     public function startedAtHuman(string $container): string

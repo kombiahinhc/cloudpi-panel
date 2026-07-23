@@ -6,9 +6,9 @@ namespace App\Livewire\Docker;
 
 use App\Services\Docker\DockerService;
 use Illuminate\View\View;
-use Livewire\Component;
+use App\Livewire\BasePage;
 
-final class Index extends Component
+final class Index extends BasePage
 {
     protected DockerService $dockerService;
     
@@ -69,23 +69,47 @@ final class Index extends Component
 
     public function start(string $container): void
     {
-        $this->dockerService->start($container);
+        $result = $this->dockerService->start($container);
 
-        $this->dispatch('$refresh');
+       if ($result->success) {
+            $this->success("Container '{$container}' started successfully.");
+        } else {
+            $this->error($result->message);
+        }
+
+        if ($result->success) {
+            $this->dispatch('$refresh');
+        }
     }
 
     public function stop(string $container): void
     {
-        $this->dockerService->stop($container);
+        $result = $this->dockerService->stop($container);
 
-        $this->dispatch('$refresh');
+        if ($result->success) {
+            $this->success("Container '{$container}' stopped successfully.");
+        } else {
+            $this->error($result->message);
+        }
+
+        if ($result->success) {
+            $this->dispatch('$refresh');
+        }
     }
 
     public function restart(string $container): void
     {
-        $this->dockerService->restart($container);
+        $result = $this->dockerService->restart($container);
 
-        $this->dispatch('$refresh');
+        if ($result->success) {
+            $this->success("Container '{$container}' restarted successfully.");
+        } else {
+            $this->error($result->message);
+        }
+
+        if ($result->success) {
+            $this->dispatch('$refresh');
+        }
     }
 
     public function render(): View
